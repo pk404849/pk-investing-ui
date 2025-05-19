@@ -1,0 +1,17 @@
+.logo{
+    /* width: 158px; */
+    margin-top: 9px;
+    margin-left: 15px;
+}
+.symbol{
+    color: white;
+}
+.expiry{
+    margin-left: 25px; 
+    color: white;
+}
+.expiry-text-box{
+   
+    margin-left: 125px;
+    margin-top: -37px;
+}
