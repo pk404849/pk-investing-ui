@@ -1,17 +1,18 @@
-import { Component } from '@angular/core';
+import { Component,inject  } from '@angular/core';
 import { CommonService } from '../../service/common.service';
 import { Router } from 'express';
 import { DataSharedService } from '../../service/websocket/data-shared.service';
 import { RequestModel } from '../../model/RequestModel';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-
+ // private commonServices = inject(CommonService);
     constructor(
     private commonServices: CommonService,
     private router: Router,
@@ -20,8 +21,8 @@ export class HomeComponent {
   
    webSocketAPI: any;
   ngOnInit(): void {
-    this.webSocketAPI = new this.webSocketAPI();
-    this.webSocketAPI._connect();
+    // this.webSocketAPI = new this.webSocketAPI();
+    // this.webSocketAPI._connect();
    
     // getSubscription().subscribe(res => {
     //  // console.log(res);
