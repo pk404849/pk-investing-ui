@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-// import { HomeComponent } from './component/home/home.component';
+import { HomeComponent } from './component/home/home.component';
 import { CommonService } from './service/common.service';
 
 // import { FormsModule } from '@angular/forms';
@@ -11,7 +11,7 @@ import { CommonService } from './service/common.service';
   imports: 
   [RouterOutlet, 
     //CommonService,
-   // HomeComponent,
+    HomeComponent,
   //AppRoutingModule,
    // NgbModule,
    // FormsModule,

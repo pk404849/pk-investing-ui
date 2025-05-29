@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { RequestModel } from '../model/RequestModel';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,14 @@ export class CommonService {
 
   private baseUrl = 'http://localhost:3000';
 
-  fetchDeltaOptionChainData (): Observable<any>{
+  fetchDeltaOptionChainData (requestModel:RequestModel): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
         'Accept': 'application/json',
       })
     }
-    return this.httpClient.get(`${this.baseUrl}/delta-option-chain/fetch-delta-option-chain-data`,httpOptions);
+    var url='currency='+requestModel.currency+'&'+'strDateTime=' +requestModel.expiryDate;
+    return this.httpClient.get(`${this.baseUrl}/delta-option-chain/fetch-delta-option-chain-current-data?`+url,httpOptions);
   }
 }

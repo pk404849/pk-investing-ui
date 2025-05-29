@@ -8,7 +8,7 @@ export class DataSharedService {
 
   constructor() { }
 
-   chatMessageTrack = [];
+  chatMessageTrack = [];
   private _dataListSource: BehaviorSubject<[]> = new BehaviorSubject([]);
 
   getSubscription(){

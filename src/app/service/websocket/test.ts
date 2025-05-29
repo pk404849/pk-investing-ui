@@ -1,4 +1,4 @@
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject } from 'rxjs';
 
 let chatMessageTrack = [];
 let _dataListSource = new BehaviorSubject([]);

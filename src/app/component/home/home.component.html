@@ -1,0 +1,91 @@
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top px-3">
+  <a class="navbar-brand font-weight-bold text-white mr-4">PK Investing</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#filters">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="filters">
+    <form class="form-inline d-flex flex-wrap">
+      <div class="form-group mx-2 mb-2">
+        <label for="currency" class="text-white font-weight-bold mr-2 mb-0">Currency</label>
+        <select class="form-control form-control-sm" id="currency" [(ngModel)]="requestModel.currency" name="currency">
+          <option value="" disabled>Select</option>
+          <option value="ETH">ETH</option>
+          <option value="BTC">BTC</option>
+          <option value="SOL">SOL</option>
+        </select>
+      </div>
+
+      <div class="form-group mx-2 mb-2">
+        <label for="expiryDate" class="text-white font-weight-bold mr-2 mb-0">Expiry Date</label>
+        <input type="date" class="form-control form-control-sm" id="expiryDate" [(ngModel)]="requestModel.expiryDate" name="expiryDate">
+      </div>
+
+      <div class="form-group mx-2 mb-2">
+        <button class="btn btn-success btn-sm" type="button" (click)="sendMessage()">Search</button>
+      </div>
+    </form>
+  </div>
+</nav>
+
+<!-- TABLE WRAPPER -->
+<div class="table-responsive table-wrapper mt-5 pt-5">
+  <table class="table table-bordered table-sm text-center sticky-header">
+    <thead class="thead-dark">
+      <tr>
+        <th colspan="9" class="bg-success text-white">Call Options</th>
+        <th></th>
+        <th colspan="9" class="bg-danger text-white">Put Options</th>
+      </tr>
+      <tr>
+        <th>VEGA</th>
+        <th>THETA</th>
+        <th>GAMMA</th>
+        <th>DELTA</th>
+        <th>IV</th>
+        <th>OICHG</th>
+        <th>OI</th>
+        <th>VOLUME</th>
+        <th>LTP</th>
+        <th>STRIKE</th>
+
+        <th>LTP</th>
+        <th>VOLUME</th>
+        <th>OI</th>
+        <th>OICHG</th>
+        <th>IV</th>
+        <th>DELTA</th>
+        <th>GAMMA</th>
+         <th>THETA</th>
+         <th>VEGA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of optionData">
+        <td>{{ row.callData.greeks.vega }}</td>
+        <td>{{ row.callData.greeks.theta }}</td>
+        <td>{{ row.callData.greeks.gamma }}</td>
+        <td>{{ row.callData.greeks.delta }}</td>
+        <td>{{ row.callData.quotes.mark_iv }}</td>
+        <td>{{ row.callData.oi_contracts }}</td>
+        <td>{{ row.callData.oi }}</td>
+        <td>{{ row.callData.volume }}</td>
+        <td>{{ row.callData.spot_price }}</td>
+
+        <td>{{ row.callData.strike_price }}</td>
+
+         <td>{{ row.putData.spot_price }}</td>
+        <td>{{ row.putData.volume }}</td>
+           <td>{{ row.putData.oi }}</td>
+           <td>{{ row.putData.quotes.mark_iv }}</td>
+        <td>{{ row.putData.oi_contracts }}</td>
+        <td>{{ row.putData.greeks.delta }}</td>
+        <td>{{ row.putData.greeks.gamma }}</td>
+        <td>{{ row.putData.greeks.theta }}</td>
+         <td>{{ row.putData.greeks.vega }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
