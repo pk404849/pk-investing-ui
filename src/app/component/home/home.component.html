@@ -1,3 +1,6 @@
+<!-- Add this CSS block inside your component HTML file or global styles -->
+
+
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top px-3">
   <a class="navbar-brand font-weight-bold text-white mr-4">PK Investing</a>
@@ -10,8 +13,8 @@
     <form class="form-inline d-flex flex-wrap">
       <div class="form-group mx-2 mb-2">
         <label for="currency" class="text-white font-weight-bold mr-2 mb-0">Currency</label>
-        <select class="form-control form-control-sm" id="currency" [(ngModel)]="requestModel.currency" name="currency">
-          <option value="" disabled>Select</option>
+        <select class="form-control form-control-sm" id="currency" [(ngModel)]="requestModel.currency" name="currency" style="width: 135px;">
+          <option value="">Select Currency</option>
           <option value="ETH">ETH</option>
           <option value="BTC">BTC</option>
           <option value="SOL">SOL</option>
@@ -20,11 +23,12 @@
 
       <div class="form-group mx-2 mb-2">
         <label for="expiryDate" class="text-white font-weight-bold mr-2 mb-0">Expiry Date</label>
-        <input type="date" class="form-control form-control-sm" id="expiryDate" [(ngModel)]="requestModel.expiryDate" name="expiryDate">
+        <input type="date" class="form-control form-control-sm" id="expiryDate" [(ngModel)]="requestModel.expiryDate"
+          name="expiryDate">
       </div>
 
-      <div class="form-group mx-2 mb-2">
-        <button class="btn btn-success btn-sm" type="button" (click)="sendMessage()">Search</button>
+      <div class="form-group mx-2 mb-2 mt-4">
+        <button class="btn btn-success btn-sm" type="button" (click)="fetchDeltaOptionChainCurrentData()">Search</button>
       </div>
     </form>
   </div>
@@ -36,7 +40,7 @@
     <thead class="thead-dark">
       <tr>
         <th colspan="9" class="bg-success text-white">Call Options</th>
-        <th></th>
+        <th class="text-white">{{currency}}</th>
         <th colspan="9" class="bg-danger text-white">Put Options</th>
       </tr>
       <tr>
@@ -49,8 +53,7 @@
         <th>OI</th>
         <th>VOLUME</th>
         <th>LTP</th>
-        <th>STRIKE</th>
-
+        <th class="bg-orange">STRIKE</th>
         <th>LTP</th>
         <th>VOLUME</th>
         <th>OI</th>
@@ -58,34 +61,61 @@
         <th>IV</th>
         <th>DELTA</th>
         <th>GAMMA</th>
-         <th>THETA</th>
-         <th>VEGA</th>
+        <th>THETA</th>
+        <th>VEGA</th>
       </tr>
     </thead>
+
     <tbody>
-      <tr *ngFor="let row of optionData">
-        <td>{{ row.callData.greeks.vega }}</td>
-        <td>{{ row.callData.greeks.theta }}</td>
-        <td>{{ row.callData.greeks.gamma }}</td>
-        <td>{{ row.callData.greeks.delta }}</td>
-        <td>{{ row.callData.quotes.mark_iv }}</td>
-        <td>{{ row.callData.oi_contracts }}</td>
-        <td>{{ row.callData.oi }}</td>
-        <td>{{ row.callData.volume }}</td>
-        <td>{{ row.callData.spot_price }}</td>
+      <ng-container *ngFor="let row of optionData; let i = index">
+        <tr>
+          <td>{{ row.callData?.greeks?.vega ?? 'N/A' }}</td>
+          <td>{{ row.callData?.greeks?.theta ?? 'N/A' }}</td>
+          <td>{{ row.callData?.greeks?.gamma ?? 'N/A' }}</td>
+          <td>{{ row.callData?.greeks?.delta ?? 'N/A' }}</td>
+          <td>{{ row.callData?.quotes?.mark_iv ?? 'N/A' }}</td>
 
-        <td>{{ row.callData.strike_price }}</td>
+          <td [ngClass]="getCallOiChgClass(row.callData?.oi_contracts)">
+            {{ row.callData?.oi_contracts ?? 'N/A' }}
+          </td>
+          <td [ngClass]="getCallOiClass(row.callData?.oi_value_usd)">
+            {{ row.callData?.oi_value_usd ?? 'N/A' }}
+          </td>
+          <td [ngClass]="getCallVolumeClass(row.callData?.volume)">
+            {{ row.callData?.volume ?? 'N/A' }}
+          </td>
 
-         <td>{{ row.putData.spot_price }}</td>
-        <td>{{ row.putData.volume }}</td>
-           <td>{{ row.putData.oi }}</td>
-           <td>{{ row.putData.quotes.mark_iv }}</td>
-        <td>{{ row.putData.oi_contracts }}</td>
-        <td>{{ row.putData.greeks.delta }}</td>
-        <td>{{ row.putData.greeks.gamma }}</td>
-        <td>{{ row.putData.greeks.theta }}</td>
-         <td>{{ row.putData.greeks.vega }}</td>
-      </tr>
+          <td>{{ row.callData?.spot_price ?? 'N/A' }}</td>
+
+          <!-- Strike Price with Orange Background -->
+          <td class="bg-orange">{{ row.callData?.strike_price ?? 'N/A' }}</td>
+
+          <td>{{ row.putData?.spot_price ?? 'N/A' }}</td>
+          <td [ngClass]="getPutVolumeClass(row.putData?.volume)">
+            {{ row.putData?.volume ?? 'N/A' }}
+          </td>
+          <td [ngClass]="getPutOiClass(row.putData?.oi_value_usd)">
+            {{ row.putData?.oi_value_usd ?? 'N/A' }}
+          </td>
+          <td [ngClass]="getPutOiChgClass(row.putData?.oi_contracts)">
+            {{ row.putData?.oi_contracts ?? 'N/A' }}
+          </td>
+          <td>{{ row.putData?.quotes?.mark_iv ?? 'N/A' }}</td>
+          <td>{{ row.putData?.greeks?.delta ?? 'N/A' }}</td>
+          <td>{{ row.putData?.greeks?.gamma ?? 'N/A' }}</td>
+          <td>{{ row.putData?.greeks?.theta ?? 'N/A' }}</td>
+          <td>{{ row.putData?.greeks?.vega ?? 'N/A' }}</td>
+        </tr>
+
+        <!-- Red Line Between Rows -->
+        <tr *ngIf="i < optionData.length - 1 && isSpotBetween(row.callData?.strike_price, optionData[i + 1]?.callData?.strike_price)">
+          <td colspan="20" class="spot-row">
+            <div class="spot-line">
+              <span class="spot-label">{{ spotPrice }}</span>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
 </div>

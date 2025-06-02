@@ -20,7 +20,8 @@
 } */
 
 /* Make space for navbar */
-body, .table-wrapper {
+body,
+.table-wrapper {
   margin-top: 80px;
 }
 
@@ -51,3 +52,127 @@ body, .table-wrapper {
     width: 100%;
   }
 }
+
+.call-highest-volume {
+  background-color: #007bff !important;
+  /* Blue */
+  color: white;
+  font-weight: bold;
+}
+
+.call-second-highest-volume {
+  background-color: #ffc107 !important;
+  /* Yellow */
+  color: black;
+  font-weight: bold;
+}
+
+.put-highest-volume {
+  background-color: #007bff !important;
+  /* Blue */
+  color: white;
+  font-weight: bold;
+}
+
+.put-second-highest-volume {
+  background-color: #ffc107 !important;
+  /* Yellow */
+  color: black;
+  font-weight: bold;
+}
+
+.call-highest-oi {
+  background-color: #007bff !important;
+  /* Blue */
+  color: white;
+  font-weight: bold;
+}
+
+.call-second-highest-oi {
+  background-color: #ffc107 !important;
+  /* Yellow */
+  color: black;
+  font-weight: bold;
+}
+
+.put-highest-oi {
+  background-color: #007bff !important;
+  /* Blue */
+  color: white;
+  font-weight: bold;
+}
+
+.put-second-highest-oi {
+  background-color: #ffc107 !important;
+  /* Yellow */
+  color: black;
+  font-weight: bold;
+}
+
+.call-highest-oiChg {
+  background-color: #007bff !important;
+  /* Blue */
+  color: white;
+  font-weight: bold;
+}
+
+.call-second-highest-oiChg {
+  background-color: #ffc107 !important;
+  /* Yellow */
+  color: black;
+  font-weight: bold;
+}
+
+.put-highest-oiChg {
+  background-color: #007bff !important;
+  /* Blue */
+  color: white;
+  font-weight: bold;
+}
+
+.put-second-highest-oiChg {
+  background-color: #ffc107 !important;
+  /* Yellow */
+  color: black;
+  font-weight: bold;
+}
+
+.bg-orange {
+  background-color: orange !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+/* Red line row */
+.spot-row {
+  position: relative;
+  height: 30px;
+  padding: 0;
+}
+
+.spot-line {
+  border-top: 5px solid red;
+  position: relative;
+  top: 50%;
+  width: 100%;
+}
+
+.spot-label {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 2px 8px;
+  font-weight: bold;
+  border: 1px solid black;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+/* Grey row style before SPOT line */
+.pre-spot-grey .left-grey {
+  background-color: #dbd7d7 !important;
+}
+
+/* Keep other right-side cells default */

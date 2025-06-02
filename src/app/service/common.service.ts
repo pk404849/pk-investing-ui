@@ -14,7 +14,7 @@ export class CommonService {
 
   private baseUrl = 'http://localhost:3000';
 
-  fetchDeltaOptionChainData (requestModel:RequestModel): Observable<any>{
+  fetchDeltaOptionChainCurrentData (requestModel:RequestModel): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
