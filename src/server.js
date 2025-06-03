@@ -4,7 +4,7 @@ const path = require('path');
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-const DIST_FOLDER = path.join(__dirname, 'dist/angular-railway-app');
+const DIST_FOLDER = path.join(__dirname, 'dist/pk-investing-ui');
 
 app.use(express.static(DIST_FOLDER));
 
