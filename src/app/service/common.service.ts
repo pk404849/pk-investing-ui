@@ -12,7 +12,7 @@ export class CommonService {
    private httpClient: HttpClient
     ) { }
 
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = 'http://172.31.37.139:3000';
 
   fetchDeltaOptionChainCurrentData (requestModel:RequestModel): Observable<any>{
     const httpOptions = {

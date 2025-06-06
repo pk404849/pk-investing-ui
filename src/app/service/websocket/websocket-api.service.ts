@@ -16,7 +16,7 @@ private stompClient: any;
   }
 
   private initializeWebSocketConnection() {
-    const serverUrl = 'http://localhost:3000/ws-option-chain';
+    const serverUrl = 'http://172.31.37.139:3000/ws-option-chain';
     const ws = new SockJS(serverUrl);
     this.stompClient = Stomp.Stomp.over(ws);
     
