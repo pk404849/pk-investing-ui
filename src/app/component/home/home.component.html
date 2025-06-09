@@ -40,9 +40,9 @@
   <table class="table table-bordered table-sm text-center sticky-header">
     <thead class="thead-dark">
       <tr>
-        <th colspan="9" class="bg-success text-white">Call Options</th>
+        <th colspan="10" class="bg-success text-white">Call Options</th>
         <th class="text-white">{{currency}}</th>
-        <th colspan="9" class="bg-danger text-white">Put Options</th>
+        <th colspan="10" class="bg-danger text-white">Put Options</th>
       </tr>
       <tr>
         <th>VEGA</th>
@@ -54,7 +54,9 @@
         <th>OI</th>
         <th>VOLUME</th>
         <th>LTP</th>
+        <th>REVERSAL</th>
         <th class="bg-orange">STRIKE</th>
+        <th>REVERSAL</th>
         <th>LTP</th>
         <th>VOLUME</th>
         <th>OI</th>
@@ -83,17 +85,17 @@
             {{ row.callData?.oi_value_usd ?? 'N/A' }}
           </td>
           <td [ngClass]="getCallVolumeClass(row.callData?.volume)">
-            {{ row.callData?.volume ?? 'N/A' }}
+            {{ row.callData?.turnover_usd ?? 'N/A' }}
           </td>
 
-          <td>{{ row.callData?.spot_price ?? 'N/A' }}</td>
-
+          <td>{{ row.callData?.mark_price ?? 'N/A' }}</td>
+          <td>NA</td>
           <!-- Strike Price with Orange Background -->
           <td class="bg-orange">{{ row.callData?.strike_price ?? 'N/A' }}</td>
-
-          <td>{{ row.putData?.spot_price ?? 'N/A' }}</td>
+<td>NA</td>
+          <td>{{ row.putData?.mark_price ?? 'N/A' }}</td>
           <td [ngClass]="getPutVolumeClass(row.putData?.volume)">
-            {{ row.putData?.volume ?? 'N/A' }}
+            {{ row.putData?.turnover_usd ?? 'N/A' }}
           </td>
           <td [ngClass]="getPutOiClass(row.putData?.oi_value_usd)">
             {{ row.putData?.oi_value_usd ?? 'N/A' }}
