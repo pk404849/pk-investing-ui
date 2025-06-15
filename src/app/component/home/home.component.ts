@@ -8,7 +8,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, CommonModule,MatDatepickerModule],
+  imports: [FormsModule, CommonModule, MatDatepickerModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   secondHighestPutOiChg: number | null = null;
 
   spotPrice: any;
-  currency:any;
+  currency: any;
   constructor(
     private commonServices: CommonService,
     private websocketApi: WebsocketApiService
@@ -73,8 +73,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     for (let row of this.optionData) {
       this.currency = row.currency;
       this.spotPrice = row.callData.spot_price;
-      if (row.callData?.volume != null) {
-        totalCallVolumes.push(row.callData.volume);
+      if (row.callData?.turnover_usd != null) {
+        totalCallVolumes.push(row.callData.turnover_usd);
       }
       if (row.callData?.oi_value_usd != null) {
         totalCallOi.push(row.callData.oi_value_usd);
@@ -83,8 +83,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         totalCallOiChg.push(row.callData.oi_contracts)
       }
 
-      if (row.putData?.volume != null) {
-        totalPutVolumes.push(row.putData.volume);
+      if (row.putData?.turnover_usd != null) {
+        totalPutVolumes.push(row.putData.turnover_usd);
       }
       if (row.putData?.oi_value_usd != null) {
         totalPutOi.push(row.putData.oi_value_usd);
@@ -180,18 +180,45 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   fetchDeltaOptionChainCurrentData(): void {
-    console.log('Currency => '+this.requestModel.currency);
-    console.log('Currency => '+this.requestModel.expiryDate);
-    this.commonServices.fetchDeltaOptionChainCurrentData(this.requestModel).subscribe((res : any) =>{
-      if(res.status && res.data != null){
+    console.log('Currency => ' + this.requestModel.currency);
+    console.log('Currency => ' + this.requestModel.expiryDate);
+    this.commonServices.fetchDeltaOptionChainCurrentData(this.requestModel).subscribe((res: any) => {
+      if (res.status && res.data != null) {
         this.optionData = res.data;
         this.updateTopCallVolumes();
-        console.log('fetchDeltaOptionChainCurrentData => '+res.data);
+        console.log('fetchDeltaOptionChainCurrentData => ' + res.data);
       }
     });
   }
 
-  
+
+  getCallVolumePercentage(volume: number): string {
+    if (!this.highestCallVolume || !volume) return '0%';
+    return ((volume / this.highestCallVolume) * 100).toFixed(2) + '%';
+  }
+  getPutVolumePercentage(volume: number): string {
+    if (!this.highestPutVolume || !volume) return '0%';
+    return ((volume / this.highestPutVolume) * 100).toFixed(2) + '%';
+  }
+
+  getCallOiPercentage(oi: number): string {
+    if (!this.highestCallOi || !oi) return '0%';
+    return ((oi / this.highestCallOi) * 100).toFixed(2) + '%';
+  }
+  getPutOiPercentage(oi: number): string {
+    if (!this.highestPutOi || !oi) return '0%';
+    return ((oi / this.highestPutOi) * 100).toFixed(2) + '%';
+  }
+
+  getCallOiChgPercentage(oi: number): string {
+    if (!this.highestCallOiChg || !oi) return '0%';
+    return ((oi / this.highestCallOiChg) * 100).toFixed(2) + '%';
+  }
+  getPutOiChgPercentage(oiChg: number): string {
+    if (!this.highestCallOiChg || !oiChg) return '0%';
+    return ((oiChg / this.highestCallOiChg) * 100).toFixed(2) + '%';
+  }
+
   ngOnDestroy(): void {
     // this.websocketApi.disconnect(); // if implemented
   }

@@ -1,25 +1,4 @@
-/* .logo{
-   
-    margin-top: 9px;
-    margin-left: 15px;
-}
-.symbol{
-    color: white;
-}
-.expiry{
-    margin-left: 25px; 
-    color: white;
-}
-.expiry-text-box{
-   
-    margin-left: 125px;
-    margin-top: -37px;
-}
-.right-col{
-    margin-left: -24px;
-} */
-
-/* Make space for navbar */
+/* Layout spacing */
 body,
 .table-wrapper {
   margin-top: 80px;
@@ -32,7 +11,7 @@ body,
   padding: 10px;
 }
 
-/* Sticky headers */
+/* Sticky header */
 .sticky-header thead th {
   position: sticky;
   top: 0;
@@ -41,7 +20,7 @@ body,
   z-index: 5;
 }
 
-/* Responsive tweaks */
+/* Responsive layout */
 @media (max-width: 768px) {
   .form-inline {
     flex-direction: column;
@@ -53,97 +32,30 @@ body,
   }
 }
 
-.call-highest-volume {
-  background-color: #007bff !important;
-  /* Blue */
-  color: white;
-  font-weight: bold;
-}
-
-.call-second-highest-volume {
-  background-color: #ffc107 !important;
-  /* Yellow */
-  color: black;
-  font-weight: bold;
-}
-
-.put-highest-volume {
-  background-color: #007bff !important;
-  /* Blue */
-  color: white;
-  font-weight: bold;
-}
-
-.put-second-highest-volume {
-  background-color: #ffc107 !important;
-  /* Yellow */
-  color: black;
-  font-weight: bold;
-}
-
-.call-highest-oi {
-  background-color: #007bff !important;
-  /* Blue */
-  color: white;
-  font-weight: bold;
-}
-
-.call-second-highest-oi {
-  background-color: #ffc107 !important;
-  /* Yellow */
-  color: black;
-  font-weight: bold;
-}
-
-.put-highest-oi {
-  background-color: #007bff !important;
-  /* Blue */
-  color: white;
-  font-weight: bold;
-}
-
-.put-second-highest-oi {
-  background-color: #ffc107 !important;
-  /* Yellow */
-  color: black;
-  font-weight: bold;
-}
-
-.call-highest-oiChg {
-  background-color: #007bff !important;
-  /* Blue */
-  color: white;
-  font-weight: bold;
-}
-
-.call-second-highest-oiChg {
-  background-color: #ffc107 !important;
-  /* Yellow */
-  color: black;
-  font-weight: bold;
-}
-
+/* Volume and OI highlights */
+.call-highest-volume,
+.put-highest-volume,
+.call-highest-oi,
+.put-highest-oi,
+.call-highest-oiChg,
 .put-highest-oiChg {
-  background-color: #007bff !important;
-  /* Blue */
+  background-color: #007bff !important; /* Blue */
   color: white;
   font-weight: bold;
 }
 
+.call-second-highest-volume,
+.put-second-highest-volume,
+.call-second-highest-oi,
+.put-second-highest-oi,
+.call-second-highest-oiChg,
 .put-second-highest-oiChg {
-  background-color: #ffc107 !important;
-  /* Yellow */
+  background-color: #ffc107 !important; /* Yellow */
   color: black;
   font-weight: bold;
 }
 
-.bg-orange {
-  background-color: orange !important;
-  color: white !important;
-  font-weight: bold;
-}
-
-/* Red line row */
+/* Special spot styling */
 .spot-row {
   position: relative;
   height: 30px;
@@ -167,12 +79,16 @@ body,
   font-weight: bold;
   border: 1px solid black;
   border-radius: 10px;
-  font-size: 15px;
 }
 
-/* Grey row style before SPOT line */
+/* Grey shading for rows before spot line */
 .pre-spot-grey .left-grey {
   background-color: #dbd7d7 !important;
 }
 
-/* Keep other right-side cells default */
+/* Orange background for other emphasis */
+.bg-orange {
+  background-color: orange !important;
+  color: black !important;
+  font-weight: bold;
+}
