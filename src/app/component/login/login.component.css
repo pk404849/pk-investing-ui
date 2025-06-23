@@ -1,0 +1,131 @@
+/* Container for full screen background */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #0f172a; /* Dark blue-gray */
+  flex-direction: column;
+}
+
+/* Login box styling */
+.login-box {
+  background-color: #1e293b;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 400px;
+  color: white;
+}
+
+/* Logo and title section */
+.logo-section {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.logo {
+  width: 100px;
+  height: 60px;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Login form headings */
+.login-heading {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+/* Form group */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: none;
+  background-color: #334155;
+  color: white;
+  outline: none;
+  font-size: 1rem;
+}
+
+/* Login button */
+.login-button {
+  width: 100%;
+  background-color: #2563eb;
+  color: white;
+  padding: 0.6rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #1d4ed8;
+}
+
+/* Text links */
+.text-center {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.link {
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* Sign up */
+.signup {
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+/* Google login button */
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.6rem;
+  width: 100%;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 1.2rem;
+  cursor: pointer;
+}
+
+.google-button:hover {
+  background-color: #b91c1c;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem;
+}

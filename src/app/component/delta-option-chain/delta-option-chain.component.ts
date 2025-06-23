@@ -9,10 +9,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
   selector: 'app-home',
   standalone: true,
   imports: [FormsModule, CommonModule, MatDatepickerModule],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  templateUrl: './delta-option-chain.component.html',
+  styleUrls: ['./delta-option-chain.component.css']
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class DeltaOptionChainComponent implements OnInit, OnDestroy {
   optionData: any = [];
   requestModel = new RequestModel();
 
@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   spotPrice: any;
   currency: any;
+  expiryDate: any;
   constructor(
     private commonServices: CommonService,
     private websocketApi: WebsocketApiService
@@ -71,8 +72,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     const totalCallOiChg: number[] = [];
     const totalPutOiChg: number[] = [];
     for (let row of this.optionData) {
-      this.currency = row.currency;
+     this.currency = row.currency;
       this.spotPrice = row.callData.spot_price;
+      this.expiryDate=row.expiryDate;
       if (row.callData?.turnover_usd != null) {
         totalCallVolumes.push(row.callData.turnover_usd);
       }

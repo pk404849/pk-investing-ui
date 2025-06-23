@@ -1,0 +1,36 @@
+<div class="login-container">
+  <div class="logo-section">
+    <img src="pk-logo-1.png" alt="Crypto Option Chain Logo" class="logo" />
+    <!-- <h1 class="title">Crypto Option Chain</h1> -->
+  </div>
+  <div class="login-box">
+    <h2 class="login-heading">Login</h2>
+    <form>
+      <div class="form-group">
+        <label for="email">Email or Mobile</label>
+        <input type="text" id="email" placeholder="Enter email or mobile" class="input-field" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password" class="input-field" />
+      </div>
+
+      <button type="submit" class="login-button" (click)="login()">Login</button>
+
+      <div class="text-center">
+        <a href="#" class="link">Forgot Password?</a>
+      </div>
+
+      <div class="text-center signup">
+        Don’t have an account?
+        <a [routerLink]="['/sign-up']" class="link">Sign up</a>
+      </div>
+
+      <button type="button" class="google-button">
+        <img src="assets/google-icon.png" alt="Google Icon" class="google-icon" />
+        Sign in with Google
+      </button>
+    </form>
+  </div>
+</div>
