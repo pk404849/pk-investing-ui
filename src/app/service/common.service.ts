@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { RequestModel } from '../model/RequestModel';
 import { environment } from '../../environments/environments';
 import { SignUpModel } from '../model/sign-up-model';
+import { LoginModel } from '../model/login-model';
 //import{} from '../environment/environment';
 @Injectable({
   providedIn: 'root'
@@ -36,5 +37,26 @@ export class CommonService {
       })
     }
     return this.httpClient.post(`${environment.baseUrl}/user/save-user`, signUpModel, httpOptions);
+  }
+
+  login(loginModel:LoginModel):Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      })
+    }
+    return this.httpClient.post(`${environment.baseUrl}/user/login`,loginModel,httpOptions);
+  }
+
+  findUserByUserId(id:any, userId:any):Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      })
+    }
+    var urlValue='id='+id+'&'+'userId='+userId;
+    return this.httpClient.get(`${environment.baseUrl}/user/find-user-by-id`+'?'+urlValue,httpOptions);
   }
 }

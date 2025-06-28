@@ -5,10 +5,11 @@ import { CommonService } from '../../service/common.service';
 import { WebsocketApiService } from '../../service/websocket/websocket-api.service';
 import { CommonModule } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, CommonModule, MatDatepickerModule],
+  imports: [FormsModule, CommonModule, MatDatepickerModule,RouterLink],
   templateUrl: './delta-option-chain.component.html',
   styleUrls: ['./delta-option-chain.component.css']
 })

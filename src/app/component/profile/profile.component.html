@@ -1,0 +1,28 @@
+<div class="profile-container">
+  <div class="profile-card">
+     <a class="navbar-brand font-weight-bold text-white mr-4" [routerLink]="['/dashboard']">
+   <img src="pk-logo-1.png" alt="PK Investing" class="d-inline-block align-top mr-2 avatar">
+  </a>
+    <!-- <img src="pk-logo-1.png" alt="User Avatar" class="avatar" /> -->
+    <h2 class="username">{{ userInfo?.userName }}</h2>
+    <p class="email">{{userInfo?.email}}</p>
+
+    <div class="profile-details">
+      <p><strong>User ID : </strong>{{userInfo?.userId}}</p>
+      <p><strong>Name : </strong>{{userInfo?.userName}}</p>
+      <p><strong>Mobile : </strong>{{userInfo?.mobileNumber}}</p>
+      <p><strong>Email : </strong>{{userInfo?.email}}</p>
+      <p><strong>Country : </strong>{{userInfo?.country}}</p>
+      <p><strong>Class Member : </strong> Premium</p>
+      <p><strong>Post : </strong> user</p>
+    </div>
+
+    <div class="status-box">
+      <p><strong>User Status : </strong> active</p>
+      <p><strong>Account Created On : </strong> 2025-04-08 04:28:12</p>
+      <p><strong>Validity Until : </strong> No validity assigned</p>
+    </div>
+
+    <button class="change-password">Change Password</button>
+  </div>
+</div>

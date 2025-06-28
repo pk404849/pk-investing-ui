@@ -5,15 +5,15 @@
   </div>
   <div class="login-box">
     <h2 class="login-heading">Login</h2>
-    <form>
+    <!-- <form> -->
       <div class="form-group">
-        <label for="email">Email or Mobile</label>
-        <input type="text" id="email" placeholder="Enter email or mobile" class="input-field" />
+        <label for="email">Email</label>
+        <input type="text" id="email" [(ngModel)]="loginModel.email" placeholder="Enter email" class="input-field" />
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter password" class="input-field" />
+        <input type="password" id="password" [(ngModel)]="loginModel.password" placeholder="Enter password" class="input-field" />
       </div>
 
       <button type="submit" class="login-button" (click)="login()">Login</button>
@@ -31,6 +31,6 @@
         <img src="assets/google-icon.png" alt="Google Icon" class="google-icon" />
         Sign in with Google
       </button>
-    </form>
+    <!-- </form> -->
   </div>
 </div>

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { RouterLink } from '@angular/router';
 import { CommonService } from '../../service/common.service';
 import { SignUpModel } from '../../model/sign-up-model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -16,7 +17,9 @@ export class SignUpComponent {
  
 
   constructor(
-    private commonService : CommonService) 
+    private commonService : CommonService,
+    private router: Router
+  ) 
     {
    
   }
@@ -27,7 +30,7 @@ export class SignUpComponent {
     this.commonService.signUp(this.signUpModel).subscribe((res) => {
        if (res.status && res.message != '') {
         alert(res.message);
-
+        this.router.navigate(['/login']);
        }
     });
   }

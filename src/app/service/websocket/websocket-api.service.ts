@@ -25,6 +25,7 @@ private stompClient: any;
     this.stompClient = Stomp.Stomp.over(ws);
     
     this.stompClient.connect({}, () => {
+      
       this.stompClient.subscribe('/topic/all-options', (message: any) => {
         this.allOptionsSubject.next(JSON.parse(message.body));
      
