@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +12,8 @@ import { Router } from '@angular/router';
 export class DashboardComponent {
 
   constructor(
-    private router: Router
+    private router: Router, 
+    private location: Location
   ) {
 
   }
@@ -26,4 +27,10 @@ export class DashboardComponent {
     localStorage.clear();
     this.router.navigate(['/login']);
   }
+
+  openInNewTab(path: string) {
+  const baseUrl = window.location.origin;
+  const fullUrl = `${baseUrl}${this.location.prepareExternalUrl(path)}`;
+  window.open(fullUrl, '_blank');
+}
 }

@@ -17,20 +17,24 @@ private stompClient: any;
   }
 
   private initializeWebSocketConnection() {
-    //const serverUrl = 'http://13.53.206.50:3000/ws-option-chain';
-    //const serverUrl = 'http://172.31.37.139:3000/ws-option-chain';
-
-    //environment.websocketserverUrl
+ 
+    if (typeof window !== 'undefined' && window.localStorage) {
+    
+    var userId = localStorage.getItem("userId");
+     if (userId) {
     const ws = new SockJS(environment.websocketserverUrl);
     this.stompClient = Stomp.Stomp.over(ws);
     
     this.stompClient.connect({}, () => {
-      
-      this.stompClient.subscribe('/topic/all-options', (message: any) => {
+      const topic = '/topic/all-options/'+userId;
+      this.stompClient.subscribe(topic, (message: any) => {
         this.allOptionsSubject.next(JSON.parse(message.body));
      
       });
     });
+    }
+    }
+    
   }
 
   getAllOptions(): Observable<any[]> {

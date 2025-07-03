@@ -8,8 +8,7 @@
             <ul>
                 <!-- <li class="left-menu"><a routerLink="/dashboard" routerLinkActive="active"><i class="icon">📊</i> Dashboard</a></li> -->
                 <li class="left-menu">
-                    <a href="#"
-                        class="flex items-center px-4 py-2 rounded bg-blue-600 sidebar-item">
+                    <a [routerLink]="['/dashboard']" class="flex items-center px-4 py-2 rounded bg-blue-600 sidebar-item">
                         <i class="ph ph-gauge mr-2">📊</i>
                         <span class="sidebar-text">Dashboard</span>
                     </a>
@@ -116,6 +115,29 @@
             <div class="activity">Use 30% off Coupon <strong>'NEW30'</strong>.</div>
             <div class="activity">New update publish 04/06/2025 03:15:00 AM.</div>
             <div class="activity">Use <strong>Free Live Option Chain</strong>.</div>
+        </div>
+
+        <div class="activities">
+            <h3>NSE DATA</h3>
+            <div class="action-buttons">
+                <!-- <button [routerLink]="['/delta-option-chain']" class="blue">NIFTY</button> -->
+                <button (click)="openInNewTab('/delta-option-chain')" class="blue">NIFTY</button>
+                <button class="purple">BANKNIFTY</button>
+                <button class="red">FINNIFTY</button>
+                <button class="gray">MIDCPNIFTY</button>
+            </div>
+        </div>
+
+        <div class="activities">
+            <h3>CRYPTO DATA</h3>
+            <div class="action-buttons">
+                <!-- <button [routerLink]="['/delta-option-chain']" class="blue">BTC</button> -->
+                <button (click)="openInNewTab('/delta-option-chain')" class="blue">BTC</button>
+                
+                <button class="purple">ETH</button>
+                <!-- <button class="red">FINNIFTY</button>
+                <button class="gray">MIDCPNIFTY</button> -->
+            </div>
         </div>
 
         <div class="action-buttons">
