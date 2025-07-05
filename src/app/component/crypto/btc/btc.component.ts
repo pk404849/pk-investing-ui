@@ -2,17 +2,19 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RequestModel } from '../../../model/RequestModel';
 import { FormsModule } from '@angular/forms';
 import { CommonService } from '../../../service/common.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RouterLink } from '@angular/router';
 import { BTCWebsocketApi } from '../../../service/websocket/crypto/btc-web-socket-api';
+
 @Component({
   selector: 'app-btc',
-  imports: [FormsModule, CommonModule, MatDatepickerModule,RouterLink],
+  imports: [FormsModule, CommonModule, MatDatepickerModule, RouterLink],
+  providers: [DatePipe],
   templateUrl: './btc.component.html',
   styleUrl: './btc.component.css'
 })
-export class BtcComponent {
+export class BtcComponent implements OnInit, OnDestroy {
 
   optionData: any = [];
   requestModel = new RequestModel();
@@ -34,31 +36,59 @@ export class BtcComponent {
   spotPrice: any;
   currency: any;
   expiryDate: any;
+  currentDate: string | null = null;
+  private clockIntervalId: any;
+
+  selectedStrikeFilter: any = '10'; // '10' = ATM, 'ALL' = all strikes
+
   constructor(
     private commonServices: CommonService,
-    //private websocketApi: WebsocketApiService
-    private btcWebsocketApi: BTCWebsocketApi
+    private btcWebsocketApi: BTCWebsocketApi,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
-    //this.fetchDeltaOptionChainCurrentData();
+    this.loadOptionData();
+    this.fetchDeltaOptionChainCurrentData();
+  }
+
+  loadOptionData(): void {
     this.btcWebsocketApi.getAllOptions().subscribe((data) => {
       if (data) {
-
-        this.optionData = data;
-        console.log('Raw Data Received:', data);
+        if (this.selectedStrikeFilter === 'ALL') {
+          this.optionData = data;
+        } else {
+          this.filterStrikePriceData(data);
+        }
+        console.log('Raw Data Received:', this.optionData);
         this.updateTopCallVolumes();
       } else {
         console.log('Received empty or null data');
       }
     });
+  }
 
-    this.fetchDeltaOptionChainCurrentData();
+  filterStrikePriceData(data: any): void {
+    const closestIndex = data.reduce((closestIdx: number, curr: any, idx: number) => {
+      return Math.abs(curr.strikePrice - curr.spotPrice) <
+        Math.abs(data[closestIdx].strikePrice - curr.spotPrice) ? idx : closestIdx;
+    }, 0);
+
+    const range = Number(this.selectedStrikeFilter); // e.g., 10 for ATM
+    const start = Math.max(0, closestIndex - range);
+    const end = Math.min(data.length - 1, closestIndex + range);
+    this.optionData = data.slice(start + 1, end + 1);
+  }
+
+  // Call this method from (change) event of dropdown
+  onStrikeFilterChange(): void {
+    this.loadOptionData();
   }
 
   isSpotBetween(currentStrike: number, nextStrike: number): boolean {
     return this.spotPrice > currentStrike && this.spotPrice < nextStrike;
   }
+
   isBeforeSpot(strikePrice: number): boolean {
     return strikePrice < this.spotPrice;
   }
@@ -66,164 +96,133 @@ export class BtcComponent {
   isAfterSpot(price: number): boolean {
     return price > this.spotPrice;
   }
-  updateTopCallVolumes() {
-    const totalCallVolumes: number[] = [];
-    const totalPutVolumes: number[] = [];
-    const totalCallOi: number[] = [];
-    const totalPutOi: number[] = [];
-    const totalCallOiChg: number[] = [];
-    const totalPutOiChg: number[] = [];
-    for (let row of this.optionData) {
-     this.currency = row.currency;
-      this.spotPrice = row.callData.spot_price;
-      this.expiryDate=row.expiryDate;
-      if (row.callData?.turnover_usd != null) {
-        totalCallVolumes.push(row.callData.turnover_usd);
-      }
-      if (row.callData?.oi_value_usd != null) {
-        totalCallOi.push(row.callData.oi_value_usd);
-      }
-      if (row.callData?.oi_contracts != null) {
-        totalCallOiChg.push(row.callData.oi_contracts)
-      }
 
-      if (row.putData?.turnover_usd != null) {
-        totalPutVolumes.push(row.putData.turnover_usd);
-      }
-      if (row.putData?.oi_value_usd != null) {
-        totalPutOi.push(row.putData.oi_value_usd);
-      }
-      if (row.putData?.oi_contracts != null) {
-        totalPutOi.push(row.putData.oi_contracts);
-      }
+  updateTopCallVolumes() {
+    const callVol: number[] = [], putVol: number[] = [],
+          callOi: number[] = [], putOi: number[] = [],
+          callOiChg: number[] = [], putOiChg: number[] = [];
+
+    for (let row of this.optionData) {
+      this.currency = row.currency;
+      this.spotPrice = row.callData.spot_price;
+      this.expiryDate = row.expiryDate;
+
+      if (row.callData?.turnover_usd != null) callVol.push(row.callData.turnover_usd);
+      if (row.callData?.oi_value_usd != null) callOi.push(row.callData.oi_value_usd);
+      if (row.callData?.oi_contracts != null) callOiChg.push(row.callData.oi_contracts);
+
+      if (row.putData?.turnover_usd != null) putVol.push(row.putData.turnover_usd);
+      if (row.putData?.oi_value_usd != null) putOi.push(row.putData.oi_value_usd);
+      if (row.putData?.oi_contracts != null) putOiChg.push(row.putData.oi_contracts);
     }
 
-    const sortedCallVolumes = [...new Set(totalCallVolumes)].sort((a, b) => b - a); // remove duplicates and sort descending
-    const sortedPutVolumes = [...new Set(totalPutVolumes)].sort((a, b) => b - a); // remove duplicates and sort descending
+    this.highestCallVolume = [...new Set(callVol)].sort((a, b) => b - a)[0] ?? null;
+    this.secondHighestCallVolume = [...new Set(callVol)].sort((a, b) => b - a)[1] ?? null;
+    this.highestPutVolume = [...new Set(putVol)].sort((a, b) => b - a)[0] ?? null;
+    this.secondHighestPutVolume = [...new Set(putVol)].sort((a, b) => b - a)[1] ?? null;
 
-    const sortedCallOi = [...new Set(totalCallOi)].sort((a, b) => b - a); // remove duplicates and sort descending
-    const sortedPutOi = [...new Set(totalPutOi)].sort((a, b) => b - a); // remove duplicates and sort descending
+    this.highestCallOi = [...new Set(callOi)].sort((a, b) => b - a)[0] ?? null;
+    this.secondHighestCallOi = [...new Set(callOi)].sort((a, b) => b - a)[1] ?? null;
+    this.highestPutOi = [...new Set(putOi)].sort((a, b) => b - a)[0] ?? null;
+    this.secondHighestPutOi = [...new Set(putOi)].sort((a, b) => b - a)[1] ?? null;
 
-    const sortedCallOiChg = [...new Set(totalCallOiChg)].sort((a, b) => b - a); // remove duplicates and sort descending
-    const sortedPutOiChg = [...new Set(totalPutOiChg)].sort((a, b) => b - a); // remove duplicates and sort descending
-
-    this.highestCallVolume = sortedCallVolumes[0] ?? null;
-    this.secondHighestCallVolume = sortedCallVolumes[1] ?? null;
-    this.highestPutVolume = sortedPutVolumes[0] ?? null;
-    this.secondHighestPutVolume = sortedPutVolumes[1] ?? null;
-
-    this.highestCallOi = sortedCallOi[0] ?? null;
-    this.secondHighestCallOi = sortedCallOi[1] ?? null;
-    this.highestPutOi = sortedPutOi[0] ?? null;
-    this.secondHighestPutOi = sortedPutOi[1] ?? null;
-
-    this.highestCallOiChg = sortedCallOiChg[0] ?? null;
-    this.secondHighestCallOiChg = sortedCallOiChg[1] ?? null;
-    this.highestPutOiChg = sortedPutOiChg[0] ?? null;
-    this.secondHighestPutOiChg = sortedPutOiChg[1] ?? null;
+    this.highestCallOiChg = [...new Set(callOiChg)].sort((a, b) => b - a)[0] ?? null;
+    this.secondHighestCallOiChg = [...new Set(callOiChg)].sort((a, b) => b - a)[1] ?? null;
+    this.highestPutOiChg = [...new Set(putOiChg)].sort((a, b) => b - a)[0] ?? null;
+    this.secondHighestPutOiChg = [...new Set(putOiChg)].sort((a, b) => b - a)[1] ?? null;
   }
 
+  // ---- CLASS & % METHODS BELOW (unchanged from your logic) ----
   getCallVolumeClass(volume: number): string {
-    if (volume === this.highestCallVolume) {
-      return 'call-highest-volume';
-    } else if (volume === this.secondHighestCallVolume) {
-      return 'call-second-highest-volume';
-    } else {
-      return '';
-    }
+    if (!this.highestCallVolume || !volume) return '';
+    const pct = (volume / this.highestCallVolume) * 100;
+    if (volume === this.highestCallVolume) return 'call-volume-blue';
+    if (volume === this.secondHighestCallVolume && pct >= 75) return 'call-volume-yellow';
+    if (pct >= 75 && volume < (this.secondHighestCallVolume ?? Infinity)) return 'call-volume-bold';
+    return '';
   }
 
   getPutVolumeClass(volume: number): string {
-    if (volume === this.highestPutVolume) {
-      return 'put-highest-volume';
-    } else if (volume === this.secondHighestPutVolume) {
-      return 'put-second-highest-volume';
-    } else {
-      return '';
-    }
+    if (!this.highestPutVolume || !volume) return '';
+    const pct = (volume / this.highestPutVolume) * 100;
+    if (volume === this.highestPutVolume) return 'put-volume-blue';
+    if (volume === this.secondHighestPutVolume && pct >= 75) return 'put-volume-yellow';
+    if (pct >= 75 && volume < (this.secondHighestPutVolume ?? Infinity)) return 'put-volume-bold';
+    return '';
   }
 
   getCallOiClass(oi: number): string {
-    if (oi === this.highestCallOi) {
-      return 'call-highest-oi';
-    } else if (oi === this.secondHighestCallOi) {
-      return 'call-second-highest-oi';
-    } else {
-      return '';
-    }
+    if (!this.highestCallOi || !oi) return '';
+    const pct = (oi / this.highestCallOi) * 100;
+    if (oi === this.highestCallOi) return 'call-oi-blue';
+    if (oi === this.secondHighestCallOi && pct >= 75) return 'call-oi-yellow';
+    if (pct >= 75 && oi < (this.secondHighestCallOi ?? Infinity)) return 'call-oi-bold';
+    return '';
   }
 
   getPutOiClass(oi: number): string {
-    if (oi === this.highestPutOi) {
-      return 'put-highest-oi';
-    } else if (oi === this.secondHighestPutOi) {
-      return 'put-second-highest-oi';
-    } else {
-      return '';
-    }
+    if (!this.highestPutOi || !oi) return '';
+    const pct = (oi / this.highestPutOi) * 100;
+    if (oi === this.highestPutOi) return 'put-oi-blue';
+    if (oi === this.secondHighestPutOi && pct >= 75) return 'put-oi-yellow';
+    if (pct >= 75 && oi < (this.secondHighestPutOi ?? Infinity)) return 'put-oi-bold';
+    return '';
   }
 
-  getCallOiChgClass(oiChg: number): string {
-    if (oiChg === this.highestCallOiChg) {
-      return 'call-highest-oiChg';
-    } else if (oiChg === this.secondHighestCallOiChg) {
-      return 'call-second-highest-oiChg';
-    } else {
-      return '';
-    }
+  getCallOiChgClass(val: number): string {
+    if (!this.highestCallOiChg || !val) return '';
+    const pct = (val / this.highestCallOiChg) * 100;
+    if (val === this.highestCallOiChg) return 'call-oiChg-blue';
+    if (val === this.secondHighestCallOiChg && pct >= 75) return 'call-oiChg-yellow';
+    if (pct >= 75 && val < (this.secondHighestCallOiChg ?? Infinity)) return 'call-oiChg-bold';
+    return '';
   }
 
-  getPutOiChgClass(oiChg: number): string {
-    if (oiChg === this.highestPutOiChg) {
-      return 'put-highest-oiChg';
-    } else if (oiChg === this.secondHighestPutOiChg) {
-      return 'put-second-highest-oiChg';
-    } else {
-      return '';
-    }
+  getPutOiChgClass(val: number): string {
+    if (!this.highestPutOiChg || !val) return '';
+    const pct = (val / this.highestPutOiChg) * 100;
+    if (val === this.highestPutOiChg) return 'put-oiChg-blue';
+    if (val === this.secondHighestPutOiChg && pct >= 75) return 'put-oiChg-yellow';
+    if (pct >= 75 && val < (this.secondHighestPutOiChg ?? Infinity)) return 'put-oiChg-bold';
+    return '';
   }
 
   fetchDeltaOptionChainCurrentData(): void {
-    console.log('Currency => ' + this.requestModel.currency);
-    console.log('Currency => ' + this.requestModel.expiryDate);
     this.commonServices.fetchDeltaOptionChainCurrentData(this.requestModel).subscribe((res: any) => {
       if (res.status && res.data != null) {
         this.optionData = res.data;
         this.updateTopCallVolumes();
-        console.log('fetchDeltaOptionChainCurrentData => ' + res.data);
+        console.log('Fetched => ', res.data);
       }
     });
   }
 
-
+  // Percentage helpers
   getCallVolumePercentage(volume: number): string {
-    if (!this.highestCallVolume || !volume) return '0%';
-    return ((volume / this.highestCallVolume) * 100).toFixed(2) + '%';
+    return this.highestCallVolume && volume ? ((volume / this.highestCallVolume) * 100).toFixed(2) + '%' : '0%';
   }
+
   getPutVolumePercentage(volume: number): string {
-    if (!this.highestPutVolume || !volume) return '0%';
-    return ((volume / this.highestPutVolume) * 100).toFixed(2) + '%';
+    return this.highestPutVolume && volume ? ((volume / this.highestPutVolume) * 100).toFixed(2) + '%' : '0%';
   }
 
   getCallOiPercentage(oi: number): string {
-    if (!this.highestCallOi || !oi) return '0%';
-    return ((oi / this.highestCallOi) * 100).toFixed(2) + '%';
-  }
-  getPutOiPercentage(oi: number): string {
-    if (!this.highestPutOi || !oi) return '0%';
-    return ((oi / this.highestPutOi) * 100).toFixed(2) + '%';
+    return this.highestCallOi && oi ? ((oi / this.highestCallOi) * 100).toFixed(2) + '%' : '0%';
   }
 
-  getCallOiChgPercentage(oi: number): string {
-    if (!this.highestCallOiChg || !oi) return '0%';
-    return ((oi / this.highestCallOiChg) * 100).toFixed(2) + '%';
+  getPutOiPercentage(oi: number): string {
+    return this.highestPutOi && oi ? ((oi / this.highestPutOi) * 100).toFixed(2) + '%' : '0%';
   }
-  getPutOiChgPercentage(oiChg: number): string {
-    if (!this.highestCallOiChg || !oiChg) return '0%';
-    return ((oiChg / this.highestCallOiChg) * 100).toFixed(2) + '%';
+
+  getCallOiChgPercentage(val: number): string {
+    return this.highestCallOiChg && val ? ((val / this.highestCallOiChg) * 100).toFixed(2) + '%' : '0%';
+  }
+
+  getPutOiChgPercentage(val: number): string {
+    return this.highestPutOiChg && val ? ((val / this.highestPutOiChg) * 100).toFixed(2) + '%' : '0%';
   }
 
   ngOnDestroy(): void {
-    // this.websocketApi.disconnect(); // if implemented
+    if (this.clockIntervalId) clearInterval(this.clockIntervalId);
   }
 }
