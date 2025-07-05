@@ -5,6 +5,8 @@ import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { DeltaOptionChainComponent } from './component/delta-option-chain/delta-option-chain.component';
 import { PriceComponent } from './component/price/price.component';
 import { ProfileComponent } from './component/profile/profile.component';
+import { BtcComponent } from './component/crypto/btc/btc.component';
+import { EthComponent } from './component/crypto/eth/eth.component';
 
 export const routes: Routes = [
     {
@@ -34,5 +36,14 @@ export const routes: Routes = [
     {
         path:'profile',
         component: ProfileComponent
+    },
+    {
+        path:'btc-option-chain',
+        component: BtcComponent
+    },
+    {
+        path:'eth-option-chain',
+        component: EthComponent
     }
+
 ];

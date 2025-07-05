@@ -6,5 +6,9 @@ export const environment = {
 
   //websocketserverUrl : 'http://13.53.206.50:3000/ws-option-chain'
   //websocketserverUrl : 'http://172.31.37.139:3000/ws-option-chain'
-  websocketserverUrl : 'http://localhost:3000/ws-option-chain'
+  websocketserverUrl : 'http://localhost:3000/ws-option-chain',
+
+  ETHWebsocketUrl: 'http://localhost:3000/ETH-ws-option-chain',
+
+  BTCWebsocketUrl: 'http://localhost:3000/BTC-ws-option-chain'
 };

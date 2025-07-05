@@ -2,13 +2,11 @@ import { Injectable } from '@angular/core';
 import SockJS from 'sockjs-client';
 import * as Stomp from '@stomp/stompjs';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../../environments/environments';
-
-
+import { environment } from '../../../../environments/environments';
 @Injectable({
   providedIn: 'root'
 })
-export class WebsocketApiService {
+export class ETHWebsocketApi {
 private stompClient: any;
   private randomOptionSubject = new BehaviorSubject<any>(null);
   private allOptionsSubject = new BehaviorSubject<any[]>([]);
@@ -22,11 +20,11 @@ private stompClient: any;
     
     // var userId = localStorage.getItem("userId");
     //  if (userId) {
-    const ws = new SockJS(environment.websocketserverUrl);
+    const ws = new SockJS(environment.ETHWebsocketUrl);
     this.stompClient = Stomp.Stomp.over(ws);
     
     this.stompClient.connect({}, () => {
-      const topic = '/topic/all-options';
+      const topic = '/ETH-topic/ETH-options';
       this.stompClient.subscribe(topic, (message: any) => {
         this.allOptionsSubject.next(JSON.parse(message.body));
      

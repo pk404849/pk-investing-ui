@@ -1,0 +1,94 @@
+/* Layout spacing */
+body,
+.table-wrapper {
+  margin-top: 80px;
+}
+
+.table-wrapper {
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  background: white;
+  padding: 10px;
+}
+
+/* Sticky header */
+.sticky-header thead th {
+  position: sticky;
+  top: 0;
+  background: #343a40;
+  color: white;
+  z-index: 5;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .form-inline {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+}
+
+/* Volume and OI highlights */
+.call-highest-volume,
+.put-highest-volume,
+.call-highest-oi,
+.put-highest-oi,
+.call-highest-oiChg,
+.put-highest-oiChg {
+  background-color: #007bff !important; /* Blue */
+  color: white;
+  font-weight: bold;
+}
+
+.call-second-highest-volume,
+.put-second-highest-volume,
+.call-second-highest-oi,
+.put-second-highest-oi,
+.call-second-highest-oiChg,
+.put-second-highest-oiChg {
+  background-color: #ffc107 !important; /* Yellow */
+  color: black;
+  font-weight: bold;
+}
+
+/* Special spot styling */
+.spot-row {
+  position: relative;
+  height: 30px;
+  padding: 0;
+}
+
+.spot-line {
+  border-top: 5px solid red;
+  position: relative;
+  top: 50%;
+  width: 104%;
+}
+
+.spot-label {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 2px 8px;
+  font-weight: bold;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+/* Grey shading for rows before spot line */
+.pre-spot-grey .left-grey {
+  background-color: #dbd7d7 !important;
+}
+
+/* Orange background for other emphasis */
+.bg-orange {
+  background-color: orange !important;
+  color: black !important;
+  font-weight: bold;
+}

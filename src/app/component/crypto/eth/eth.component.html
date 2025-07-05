@@ -1,0 +1,150 @@
+<!-- Add this CSS block inside your component HTML file or global styles -->
+
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top px-3">
+  <!-- <a class="navbar-brand font-weight-bold text-white mr-4">PK Investing</a> -->
+ <a class="navbar-brand font-weight-bold text-white mr-4" [routerLink]="['/dashboard']">
+   <img src="pk-logo-1.png" alt="PK Investing" width="100" height="50" class="d-inline-block align-top mr-2">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#filters">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="filters">
+    <form class="form-inline d-flex flex-wrap">
+      <!-- <div class="form-group mx-2 mb-2">
+        <label for="currency" class="text-white font-weight-bold mr-2 mb-0">Currency</label>
+        <select class="form-control form-control-sm" id="currency" [(ngModel)]="requestModel.currency" name="currency"
+          style="width: 135px;">
+          <option value="">Select Currency</option>
+          <option value="ETH">ETH</option>
+          <option value="BTC">BTC</option>
+          <option value="SOL">SOL</option>
+        </select>
+      </div> -->
+
+      <!-- <div class="form-group mx-2 mb-2">
+        <label for="expiryDate" class="text-white font-weight-bold mr-2 mb-0">Expiry Date</label>
+        <input type="date" class="form-control form-control-sm" id="expiryDate" [(ngModel)]="requestModel.expiryDate"
+          name="expiryDate">
+      </div> -->
+
+      <!-- <div class="form-group mx-2 mb-2 mt-4">
+        <button class="btn btn-success btn-sm" type="button"
+          (click)="fetchDeltaOptionChainCurrentData()">Search</button>
+      </div> -->
+      <div class="form-group mx-2 mb-2">
+        <label for="currency" class="text-white font-weight-bold mr-2 mb-0">Currency - {{currency}}</label>
+        <label for="currency" class="text-white font-weight-bold mr-2 mb-0">Spot Price - {{spotPrice}}</label>
+        <br>
+        <label for="expiryDate" class="text-white font-weight-bold mr-2 mb-0">Expiry - {{expiryDate}}</label> 
+      </div>
+      <!-- <div class="form-group mx-2 mb-2">
+        <label for="currency" class="text-white font-weight-bold mr-2 mb-0">Currency - {{currency}}</label>
+      </div> -->
+    </form>
+  </div>
+</nav>
+
+<!-- TABLE WRAPPER -->
+<div class="table-responsive table-wrapper mt-5 pt-5">
+  <!-- <div class="table-responsive  mt-5 pt-5"> -->
+  <table class="table table-bordered table-sm text-center sticky-header">
+    <thead class="thead-dark">
+      <tr>
+        <th colspan="10" class="bg-success text-white">Call Options</th>
+        <th class="text-white">{{spotPrice}}</th>
+        <th colspan="10" class="bg-danger text-white">Put Options</th>
+      </tr>
+      <tr>
+        <th>VEGA</th>
+        <th>THETA</th>
+        <th>GAMMA</th>
+        <th>DELTA</th>
+        <th>IV</th>
+        <th>OICHG</th>
+        <th>OI</th>
+        <th>VOLUME</th>
+        <th>LTP</th>
+        <th>REVERSAL</th>
+        <th>STRIKE</th>
+        <th>REVERSAL</th>
+        <th>LTP</th>
+        <th>VOLUME</th>
+        <th>OI</th>
+        <th>OICHG</th>
+        <th>IV</th>
+        <th>DELTA</th>
+        <th>GAMMA</th>
+        <th>THETA</th>
+        <th>VEGA</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <ng-container *ngFor="let row of optionData; let i = index">
+        <tr>
+          <td>{{ row.callData?.greeks?.vega ?? 'N/A' }}</td>
+          <td>{{ row.callData?.greeks?.theta ?? 'N/A' }}</td>
+          <td>{{ row.callData?.greeks?.gamma ?? 'N/A' }}</td>
+          <td>{{ row.callData?.greeks?.delta ?? 'N/A' }}</td>
+          <td>{{ row.callData?.quotes?.mark_iv ?? 'N/A' }}</td>
+
+          <td [ngClass]="getCallOiChgClass(row.callData?.oi_contracts)">
+            {{ row.callData?.oi_contracts ?? 'N/A' }}
+            <br>
+            {{getCallOiChgPercentage(row.callData?.oi_contracts)}}
+          </td>
+          <td [ngClass]="getCallOiClass(row.callData?.oi_value_usd)">
+            {{ row.callData?.oi_value_usd ?? 'N/A' }}
+            <br>
+            {{getCallOiPercentage(row.callData?.oi_value_usd)}}
+          </td>
+          <td [ngClass]="getCallVolumeClass(row.callData?.turnover_usd)">
+            {{ row.callData?.turnover_usd ?? 'N/A' }}
+            <br>
+            {{ getCallVolumePercentage(row.callData?.turnover_usd) }}
+          </td>
+
+          <td>{{ row.callData?.mark_price ?? 'N/A' }}</td>
+          <td>NA</td>
+          <!-- Strike Price with Orange Background -->
+          <td class="bg-orange">{{ row.callData?.strike_price ?? 'N/A' }}</td>
+          <td>NA</td>
+          <td>{{ row.putData?.mark_price ?? 'N/A' }}</td>
+          <td [ngClass]="getPutVolumeClass(row.putData?.turnover_usd)">
+            {{ row.putData?.turnover_usd ?? 'N/A' }}
+            <br>
+            {{ getPutVolumePercentage(row.putData?.turnover_usd) }}
+          </td>
+          <td [ngClass]="getPutOiClass(row.putData?.oi_value_usd)">
+            {{ row.putData?.oi_value_usd ?? 'N/A' }}
+            <br>
+            {{getPutOiPercentage(row.putData?.oi_value_usd)}}
+          </td>
+          <td [ngClass]="getPutOiChgClass(row.putData?.oi_contracts)">
+            {{ row.putData?.oi_contracts ?? 'N/A' }}
+            <br>
+            {{getPutOiChgPercentage(row.putData?.oi_contracts)}}
+          </td>
+          <td>{{ row.putData?.quotes?.mark_iv ?? 'N/A' }}</td>
+          <td>{{ row.putData?.greeks?.delta ?? 'N/A' }}</td>
+          <td>{{ row.putData?.greeks?.gamma ?? 'N/A' }}</td>
+          <td>{{ row.putData?.greeks?.theta ?? 'N/A' }}</td>
+          <td>{{ row.putData?.greeks?.vega ?? 'N/A' }}</td>
+        </tr>
+
+        <!-- Red Line Between Rows -->
+        <tr
+          *ngIf="i < optionData.length - 1 && isSpotBetween(row.callData?.strike_price, optionData[i + 1]?.callData?.strike_price)">
+          <td colspan="20" class="spot-row">
+            <div class="spot-line">
+              <span class="spot-label">{{ spotPrice }}</span>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>

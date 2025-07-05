@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import SockJS from 'sockjs-client';
 import * as Stomp from '@stomp/stompjs';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../../environments/environments';
-
+import { environment } from '../../../../environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
-export class WebsocketApiService {
+export class BTCWebsocketApi {
 private stompClient: any;
   private randomOptionSubject = new BehaviorSubject<any>(null);
   private allOptionsSubject = new BehaviorSubject<any[]>([]);
@@ -22,11 +21,11 @@ private stompClient: any;
     
     // var userId = localStorage.getItem("userId");
     //  if (userId) {
-    const ws = new SockJS(environment.websocketserverUrl);
+    const ws = new SockJS(environment.BTCWebsocketUrl);
     this.stompClient = Stomp.Stomp.over(ws);
     
     this.stompClient.connect({}, () => {
-      const topic = '/topic/all-options';
+      const topic = '/BTC-topic/BTC-options';
       this.stompClient.subscribe(topic, (message: any) => {
         this.allOptionsSubject.next(JSON.parse(message.body));
      
