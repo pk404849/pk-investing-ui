@@ -33,27 +33,27 @@ body,
 }
 
 /* Volume and OI highlights */
-.call-highest-volume,
+/* .call-highest-volume,
 .put-highest-volume,
 .call-highest-oi,
 .put-highest-oi,
 .call-highest-oiChg,
 .put-highest-oiChg {
-  background-color: #007bff !important; /* Blue */
+  background-color: #007bff !important;
   color: white;
   font-weight: bold;
-}
+} */
 
-.call-second-highest-volume,
+/* .call-second-highest-volume,
 .put-second-highest-volume,
 .call-second-highest-oi,
 .put-second-highest-oi,
 .call-second-highest-oiChg,
 .put-second-highest-oiChg {
-  background-color: #ffc107 !important; /* Yellow */
+  background-color: #ffc107 !important; 
   color: black;
   font-weight: bold;
-}
+} */
 
 /* Special spot styling */
 .spot-row {
@@ -90,5 +90,35 @@ body,
 .bg-orange {
   background-color: orange !important;
   color: black !important;
+  font-weight: bold;
+}
+
+.put-oiChg-blue,
+.call-oiChg-blue,
+.put-oi-blue,
+.call-oi-blue,
+.put-volume-blue,
+.call-volume-blue {
+  background-color: rgb(56, 190, 235) !important;
+  /* color: white; */
+  font-weight: bold;
+}
+
+.put-oiChg-yellow,
+.call-oiChg-yellow, 
+.put-oi-yellow,
+.call-oi-yellow,
+.put-volume-yellow,
+.call-volume-yellow {
+  background-color: yellow;
+  font-weight: bold;
+}
+
+.put-oiChg-bold,
+.call-oiChg-bold,
+.put-oi-bold,
+.call-oi-bold,
+.put-volume-bold,
+.call-volume-bold {
   font-weight: bold;
 }
